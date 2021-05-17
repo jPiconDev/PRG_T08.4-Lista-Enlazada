@@ -3,7 +3,7 @@ package ds;
 /**
  * El interfaz DynList nos permite manejar el contenido de colecciones de objetos.
  */
-public interface DynList<E>{
+public interface DynList<E> extends Iterable<E>{
     /**
      * Método que devuelve el número de elementos de la lista
      * @return
@@ -48,8 +48,8 @@ public interface DynList<E>{
     /**
      * Método que elimina un elemento de la lista dada una posición.
      * Desplaza todos los elementos contiguos una posición a la izquierda
-     * @param index 
-     * @return posición de la lista donde será insertado el elemento
+     * @param index posición de la lista donde será removido el elemento
+     * @return el elemento removido
      * @throws IndexOutOfBoundsException si el índice está fuera del rango de la lista
      */
     E remove(int index) throws IndexOutOfBoundsException;

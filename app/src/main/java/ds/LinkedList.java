@@ -2,6 +2,7 @@ package ds;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 public class LinkedList<T> implements DynList<T> {
@@ -35,7 +36,7 @@ public class LinkedList<T> implements DynList<T> {
         ListNode<T> newNode = new ListNode<>(data);
 
         // Si el parámetro es null:
-        if(data == null) return false;
+        if(head == null || data == null) return false;
 
         // Si la lista está vacía:
         if(len==0) { 
@@ -58,7 +59,7 @@ public class LinkedList<T> implements DynList<T> {
     @Override
     public boolean add(int index, T data) throws IndexOutOfBoundsException {
         //Comprobamos que el parámetro recicbido no sea null:
-        if(data == null) return false; 
+        if(head == null || data == null) return false; 
 
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
         if(index < 0 || index > len) throw new IndexOutOfBoundsException();
@@ -108,16 +109,17 @@ public class LinkedList<T> implements DynList<T> {
      * (o de manera equivalente, si esta lista cambió como resultado de la llamada).
      * 
      * @param data
-     * @return
+     * @return boolean
      */
-    public boolean delete(T data) {
+    @Override
+    public boolean delete(T data) throws NoSuchElementException {
         //Creamos un nuevo nodo a pertir del parámetro recibido
         ListNode<T> newNode = new ListNode<>(data);
 
         // Si la lista está vacía:
         if(len == 0) throw new NoSuchElementException();
 
-        // Si el parámetro es null:
+        // Si head o el parámetro es null:
         if(data == null) return false;
 
         // Si el nodo a eliminar está a principio de la lista;
@@ -133,10 +135,34 @@ public class LinkedList<T> implements DynList<T> {
         }
 
         // Si el nodo a eliminar está en medio de la lista la recorremos;
-        for (ListNode<T> element : ) {
-            con
+        ListNode<T> node = head;
+        while(node.next != null){
+            node = node.getNext();
+            if(node.equals(newNode)) {
+                node.getPrev().next = node.next;
+                node.getNext().prev = node.prev;
+                return true;
+            }
         }
-        return true;
+    }
+
+    @Override
+    public T remove(int index) throws IndexOutOfBoundsException{
+        //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
+
+        // Recorremos la lista;
+        ListNode<T> node = head;
+        int cont = 1;
+        while(node.next != null){
+            if(node.equals(newNode)) {
+                node.getPrev().next = node.next;
+                node.getNext().prev = node.prev;
+                
+                return node.data;
+            }
+            node = node.getNext();
+        }
     }
 
     @Override
@@ -152,18 +178,39 @@ public class LinkedList<T> implements DynList<T> {
     /**
      * Devuelve true si la lista está vacía, false de lo contrario.
      * 
+     * @return boolean
      */
     public boolean isEmpty(){
         return head==null;
     }
+
     @Override
     public Iterator<T> iterator() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    public T remove(int pos){
+        return new Iterator<T>(){
+            ListNode<T> node = head;
 
+            @Override
+            public boolean hasNext() {
+                return node != null;
+            }
+
+            @Override
+            public T next() {
+                if(hasNext()){
+                    T data = node.data;
+                    node = node.next;
+                    return data;
+                }
+                return null;
+            }
+        };
     }
+    
+    /**
+     * Devuelve el número de objetos {@link ListNode} que contiene la lista.
+     * 
+     * @return len El número de elementos de la lista
+     */
     public int size(){
         return len;
     }
