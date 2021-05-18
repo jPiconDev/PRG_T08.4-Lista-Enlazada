@@ -14,7 +14,7 @@ import java.util.Iterator;
  * @version v1.0.0
  */
 @SuppressWarnings("unchecked")
-public class DynArray<E> implements DynList<E>, Iterable<E>{
+public class DynArray<E> implements DynList<E> {
     private static final int DEFAULT_SIZE = 10;
     private E[] dynArr; //Colección de elementos
     private int lastP;  //Primera posición vacía de la colección

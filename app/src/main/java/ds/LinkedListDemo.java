@@ -15,7 +15,7 @@ public class LinkedListDemo {
             System.out.println(s);
 
         System.out.println("Borramos la lista:");
-        l1.clear()
+        l1.clear();
         System.out.println("l1[" + l1.size() + "]: " + l1);
 
         System.out.println("Nueva lista:");

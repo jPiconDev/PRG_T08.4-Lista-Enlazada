@@ -2,10 +2,7 @@ package ds;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.NoSuchElementException;
-
-import javax.xml.crypto.Data;
 
 public class LinkedList<T> implements DynList<T> {
     private ListNode<T> head;
@@ -38,22 +35,20 @@ public class LinkedList<T> implements DynList<T> {
         ListNode<T> newNode = new ListNode<>(data);
 
         // Si el parámetro es null:
-        if(head == null || data == null) return false;
+        if(data == null) return false;
 
         // Si la lista está vacía:
         if(len==0) { 
+            tail = head;
             head = newNode;
-            tail = newNode;
-            newNode.next = null;
-            newNode.prev = null;
+            len++;
             return true;
         }
 
         // Si la lista no está vacía (len!=0) añadimos al final el nuevo nodo:
         newNode.prev = tail; 
         newNode.next = null;  
-        tail.next = newNode;
-        tail = tail.next;
+        tail = newNode;
         len++;
         return true;
     }
@@ -100,6 +95,7 @@ public class LinkedList<T> implements DynList<T> {
             }
             cont++;
         }
+        return false;
     }
 
     /**
@@ -128,12 +124,14 @@ public class LinkedList<T> implements DynList<T> {
         if(head.equals(newNode)) {
             head = head.next;
             head.prev = null;
+            return true;
         }
 
         // Si el nodo a eliminar está a final de la lista;
         if(tail.equals(newNode)) {
             tail = tail.prev;
             tail.next = null;
+            return true;
         }
 
         // Si el nodo a eliminar está en medio de la lista la recorremos;
@@ -146,6 +144,7 @@ public class LinkedList<T> implements DynList<T> {
                 return true;
             }
         }
+        return false;
     }
 
     @Override
@@ -168,8 +167,19 @@ public class LinkedList<T> implements DynList<T> {
     }
 
     @Override
-    public T get(int data){
+    public T get(int index) throws IndexOutOfBoundsException{
+        //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
 
+        ListNode<T> node = head;
+        int cont = 1;
+        while(node != null){
+            if(cont == index) {
+                return node.data;
+            }
+            cont++;
+        }
+        return null;
     }
 
     public int indexOf(T data){
@@ -281,11 +291,18 @@ public class LinkedList<T> implements DynList<T> {
     public String toString() {
         String str = "";
         ListNode<T> node = head;
-        while(node.getNext() != null){
+        // if(node.data != null) {
+        //     str += node.toString();
+        //     return "[" + str + "]";
+        // } 
+
+        while(node != null) {
             str += node.toString();
-            if(node.getNext() != null) str += ", ";
+            if(node.getNext() != null) {
+                str += ", ";
+                node = node.getNext();
+            }
         }
-        node = node.getNext();
         return "[" + str + "]";
     }
 
@@ -323,7 +340,7 @@ public class LinkedList<T> implements DynList<T> {
     
         @Override
         public String toString() {
-            return  (String) data;
+            return  data.toString();
         }
     }
 }
