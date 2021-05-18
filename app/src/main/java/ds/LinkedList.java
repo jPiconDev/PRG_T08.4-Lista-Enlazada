@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
+import javax.xml.crypto.Data;
+
 public class LinkedList<T> implements DynList<T> {
     private ListNode<T> head;
     private ListNode<T> tail;
@@ -154,15 +156,15 @@ public class LinkedList<T> implements DynList<T> {
         // Recorremos la lista;
         ListNode<T> node = head;
         int cont = 1;
-        while(node.next != null){
-            if(node.equals(newNode)) {
+        while(node != null){
+            if(cont == index) {
                 node.getPrev().next = node.next;
                 node.getNext().prev = node.prev;
-                
                 return node.data;
             }
             node = node.getNext();
         }
+        return null;
     }
 
     @Override
@@ -171,8 +173,21 @@ public class LinkedList<T> implements DynList<T> {
     }
 
     public int indexOf(T data){
+        // Si el parámetro es null:
+        if(data == null) return -1;
 
-    
+        //Creamos un ListNode con los datos del parámetro:
+        ListNode<T> newNode = new ListNode<>(data);
+        ListNode<T> node = head;
+        int cont = 1;
+        while(node != null){
+            if(node.equals(newNode)) {
+                return cont;
+            }
+            cont++;
+        }
+        return -1;
+    }
     
 
     /**
