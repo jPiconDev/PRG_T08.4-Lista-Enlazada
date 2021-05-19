@@ -50,14 +50,18 @@ public class LinkedListTest {
         //Eliminamos el valor 4
         l2.delete(4);
         str = ("l2[" + l2.size() + "]: " + l2);
-        assertEquals("l2[3]: [3, 8]", str);
-    }
+        assertEquals("l2[2]: [3, 8]", str);
 
-    
-    // @Test
-    // public void name() {
-        
-    //     String str = ;
-    //     assertEquals(, );
-    // }
+        //Cambiamos el segundo elemento
+        l2.set(1, 99);
+        str = ("l2[" + l2.size() + "]: " + l2);
+        assertEquals("l2[2]: [3, 99]", str);
+
+        // Generamos una excepción java.lang.IndexOutOfBoundsException:
+        str = "";
+        try { l2.set(100, 0); }
+        catch(Exception e) { str += e.toString();}
+        assertEquals("java.lang.IndexOutOfBoundsException: Índice fuera de rango: 100", str);
+
+    }   
 }

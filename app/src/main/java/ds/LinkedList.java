@@ -61,7 +61,7 @@ public class LinkedList<T> implements DynList<T> {
         if(head == null || data == null) return false; 
 
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
-        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException("Índice fuera de rango: " + index);
 
         //Creamos un nuevo nodo a pertir del parámetro recibido
         ListNode<T> newNode = new ListNode<>(data);
@@ -74,15 +74,15 @@ public class LinkedList<T> implements DynList<T> {
             return true;
         } 
 
-        //Si el índice es el último de la lista:
-        if(index == len) {
-            newNode.prev = tail;
-            tail = newNode;
-            len++;
-            return true;
-        }
+        // //Si el índice es el último de la lista:
+        // if(index+1 == len) {
+        //     newNode.prev = tail;
+        //     tail = newNode;
+        //     len++;
+        //     return true;
+        // }
 
-        //Si el índice está en medio de la lista:
+        //Si el índice está en medio de la lista o al final:
         ListNode<T> node = head;
         int cont = 2;
         while(node != null) {
@@ -155,7 +155,7 @@ public class LinkedList<T> implements DynList<T> {
     @Override
     public T remove(int index) throws IndexOutOfBoundsException{
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
-        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException("Índice fuera de rango: " + index);
 
         //Si el indice es 1 (head)
         if(index == 0){
@@ -185,7 +185,7 @@ public class LinkedList<T> implements DynList<T> {
     @Override
     public T get(int index) throws IndexOutOfBoundsException{
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
-        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException("Índice fuera de rango: " + index);
 
         ListNode<T> node = head;
         int cont = 1;
@@ -269,36 +269,37 @@ public class LinkedList<T> implements DynList<T> {
         if(data == null) return; 
 
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
-        if(index < 0 || index > len) throw new IndexOutOfBoundsException();
+        if(index < 0 || index > len) throw new IndexOutOfBoundsException("Índice fuera de rango: " + index);
 
         // Creamos un nuevo nodo
         ListNode<T> newNode = new ListNode<T>(data); 
 
         //Si el índice es el primero de la lista:
-        if(index == 1) {
+        if(index == 0) {
             newNode.next = head.next;
             head = newNode;
             return;
         } 
 
         //Si el índice es el último de la lista:
-        if(index == len) {
+        if(index+1 == len) {
             newNode.prev = tail.prev;
+            tail.prev.next = newNode;
             tail = newNode;
             return;
         }
 
         //Si el índice está en medio de la lista:
-        ListNode<T> node = head;
-        int cont = 2;
-        while(node.getNext() != null) {
-            node = node.getNext();
+        ListNode<T> node = head.next;
+        int cont = 1;
+        while(node != null) {
             if(cont == index) {
                 newNode.prev = node.prev;
                 newNode.next = node.next;
                 node.getPrev().next = newNode;
-                node.getNext().getNext().prev = newNode;
+                return;
             }
+            node = node.next;
             cont++;
         }
     }
