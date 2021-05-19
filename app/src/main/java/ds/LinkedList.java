@@ -39,16 +39,18 @@ public class LinkedList<T> implements DynList<T> {
 
         // Si la lista está vacía:
         if(len==0) { 
-            tail = head;
+            tail = newNode;
             head = newNode;
             len++;
             return true;
         }
 
         // Si la lista no está vacía (len!=0) añadimos al final el nuevo nodo:
-        newNode.prev = tail; 
+        ListNode<T> node = tail;
+        newNode.prev = node; 
         newNode.next = null;  
         tail = newNode;
+        tail.getPrev().next = tail;
         len++;
         return true;
     }
@@ -83,8 +85,8 @@ public class LinkedList<T> implements DynList<T> {
         //Si el índice está en medio de la lista:
         ListNode<T> node = head;
         int cont = 2;
-        while(node.getNext() != null) {
-            node = node.getNext();
+        while(node != null) {
+            node = node.next.next;
             if(cont == index) {
                 newNode.prev = node.prev;
                 newNode.next = node;
@@ -124,6 +126,7 @@ public class LinkedList<T> implements DynList<T> {
         if(head.equals(newNode)) {
             head = head.next;
             head.prev = null;
+            len--;
             return true;
         }
 
@@ -131,18 +134,20 @@ public class LinkedList<T> implements DynList<T> {
         if(tail.equals(newNode)) {
             tail = tail.prev;
             tail.next = null;
+            len--;
             return true;
         }
 
         // Si el nodo a eliminar está en medio de la lista la recorremos;
-        ListNode<T> node = head;
-        while(node.next != null){
-            node = node.getNext();
+        ListNode<T> node = head.next;
+        while(node != null){
             if(node.equals(newNode)) {
-                node.getPrev().next = node.next;
+                node.prev.next = node.next;
                 node.getNext().prev = node.prev;
+                len--;
                 return true;
             }
+            node = node.next;
         }
         return false;
     }
@@ -152,16 +157,27 @@ public class LinkedList<T> implements DynList<T> {
         //Si el índice está fuera del tamaño de la lista, lanzamos la excepción
         if(index < 0 || index > len) throw new IndexOutOfBoundsException();
 
+        //Si el indice es 1 (head)
+        if(index == 0){
+            ListNode<T> node = head;
+            head = node.next;
+            head.prev = null;
+            len--;
+            return node.data;
+        }
+
         // Recorremos la lista;
         ListNode<T> node = head;
         int cont = 1;
+        node = node.next;
         while(node != null){
             if(cont == index) {
                 node.getPrev().next = node.next;
                 node.getNext().prev = node.prev;
+                len--;
                 return node.data;
             }
-            node = node.getNext();
+            node = node.next;
         }
         return null;
     }
@@ -295,19 +311,23 @@ public class LinkedList<T> implements DynList<T> {
         //     str += node.toString();
         //     return "[" + str + "]";
         // } 
-
-        while(node != null) {
-            str += node.toString();
-            if(node.getNext() != null) {
-                str += ", ";
-                node = node.getNext();
+        if(len>0){
+            while(node != null) {
+                str += node.toString();
+                if(node.getNext() != null) {
+                    str += ", ";
+                }
+                node = node.next;
             }
         }
         return "[" + str + "]";
     }
 
+    
+
     // Subclase ListNode ##################################################
 
+    @SuppressWarnings("unchecked")
     public class ListNode<E> {
         private E data;
         private ListNode<E> next;
@@ -338,6 +358,28 @@ public class LinkedList<T> implements DynList<T> {
             this.prev = prev;
         }
     
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((data == null) ? 0 : data.hashCode());
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || !(obj instanceof LinkedList.ListNode))
+                return false;
+            
+            LinkedList<T>.ListNode<E> other = (LinkedList<T>.ListNode<E>) obj;
+            if (data == null) {
+                if (other.data != null)
+                    return false;
+            } else if (!data.equals(other.data))
+                return false;
+            return true;
+        }
         @Override
         public String toString() {
             return  data.toString();
