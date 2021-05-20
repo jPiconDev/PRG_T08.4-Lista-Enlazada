@@ -1,6 +1,7 @@
-ds/LinkedListDemo.class
 ds/LinkedList$ListNode.class
 ds/DynArray.class
+ds/Queue.class
+ds/Stack.class
 ds/DynList.class
 ds/LinkedList$1.class
 ds/LinkedList.class

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedList<T> implements DynList<T>, Stack<T>, Queue<T> {
+public class LinkedList<T> implements DynList<T> {
     private ListNode<T> head;
     private ListNode<T> tail;
     private int len;
@@ -323,32 +323,6 @@ public class LinkedList<T> implements DynList<T>, Stack<T>, Queue<T> {
         }
         return "[" + str + "]";
     }
-
-    @Override
-    public void enqueue(T obj) {
-        if(obj != null) add(obj);
-    }
-
-    @Override
-    public T dequeue() {
-        return (len > 0) ? remove(0) : null;
-    }
-
-    @Override
-    public void push(T obj) {
-        if(obj != null) add(obj);
-    }
-
-    @Override
-    public T pop() {
-        return (len > 0) ? remove(len-1) : null;
-    }
-
-    @Override
-    public T peek() {
-        return head == null ? null : head.data;
-    }
-    
 
     // Subclase ListNode ##################################################
 

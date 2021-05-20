@@ -1,5 +1,6 @@
 package ds;
 
+
 /**
  * El interfaz DynList nos permite manejar el contenido de colecciones de objetos.
  */
